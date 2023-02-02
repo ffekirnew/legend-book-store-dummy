@@ -1,10 +1,20 @@
-version: '3.8'
+version: '3'
 services:
-  dev-db:
-    image: postgres:13
+  legend-book-store:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nest
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nest
     ports:
       - 5432:5432
-    environment:
-      - POSTGRES_USER: postgres
-      - POSTGRES_PASSWORD: postgres
-      - POSTGRES_DB: nest
