@@ -12,38 +12,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BooksController = void 0;
+exports.BooksService = void 0;
 const common_1 = require("@nestjs/common");
-const books_service_1 = require("./books.service");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
 const book_entity_1 = require("./entities/book.entity");
-let BooksController = class BooksController {
-    constructor(booksService) {
-        this.booksService = booksService;
+let BooksService = class BooksService {
+    constructor(bookRepository) {
+        this.bookRepository = bookRepository;
     }
     async findAll() {
-        return this.booksService.findAll();
+        return await this.bookRepository.find();
     }
     async create(book) {
-        console.log(book);
-        this.booksService.create(book);
+        await this.bookRepository.save(book);
     }
 };
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], BooksController.prototype, "findAll", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [book_entity_1.Book]),
-    __metadata("design:returntype", Promise)
-], BooksController.prototype, "create", null);
-BooksController = __decorate([
-    (0, common_1.Controller)('books'),
-    __metadata("design:paramtypes", [books_service_1.BooksService])
-], BooksController);
-exports.BooksController = BooksController;
-//# sourceMappingURL=books.controller.js.map
+BooksService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(book_entity_1.Book)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
+], BooksService);
+exports.BooksService = BooksService;
+//# sourceMappingURL=books.service.spec.js.map

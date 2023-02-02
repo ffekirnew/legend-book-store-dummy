@@ -9,6 +9,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BooksService = void 0;
 const common_1 = require("@nestjs/common");
 let BooksService = class BooksService {
+    create(createBookDto) {
+        return 'This action adds a new book';
+    }
+    findAll() {
+        let newBooks;
+        return newBooks;
+    }
+    findOne(id) {
+        return `This action returns a #${id} book`;
+    }
+    update(id, updateBookDto) {
+        return `This action updates a #${id} book`;
+    }
+    remove(id) {
+        return `This action removes a #${id} book`;
+    }
 };
 BooksService = __decorate([
     (0, common_1.Injectable)()
