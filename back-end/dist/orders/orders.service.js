@@ -12,26 +12,34 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BooksService = void 0;
+exports.OrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const book_entity_1 = require("./entities/book.entity");
-let BooksService = class BooksService {
-    constructor(bookRepository) {
-        this.bookRepository = bookRepository;
+const order_entity_1 = require("./entities/order.entity");
+let OrdersService = class OrdersService {
+    constructor(orderRepository) {
+        this.orderRepository = orderRepository;
     }
-    async findAll() {
-        return await this.bookRepository.find();
+    async getAllOrders() {
+        const orders = await this.orderRepository.find();
+        if (!orders) {
+            throw new common_1.NotFoundException(`No orders found in the database.`);
+        }
+        return orders;
     }
-    async create(book) {
-        await this.bookRepository.save(book);
+    async getOrderByID(id) {
+        const found = await this.orderRepository.findOne({ where: { id } });
+        if (!found) {
+            throw new common_1.NotFoundException(`No order was found with the id ${id}.`);
+        }
+        return found;
     }
 };
-BooksService = __decorate([
+OrdersService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(book_entity_1.Book)),
+    __param(0, (0, typeorm_1.InjectRepository)(order_entity_1.Order)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
-], BooksService);
-exports.BooksService = BooksService;
-//# sourceMappingURL=books.service.spec.js.map
+], OrdersService);
+exports.OrdersService = OrdersService;
+//# sourceMappingURL=orders.service.js.map

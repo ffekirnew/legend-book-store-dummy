@@ -1,10 +1,12 @@
+import { Repository } from 'typeorm';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
 export declare class BooksService {
-    create(createBookDto: CreateBookDto): string;
-    findAll(): Book[];
-    findOne(id: number): string;
-    update(id: number, updateBookDto: UpdateBookDto): string;
-    remove(id: number): string;
+    private readonly bookRepository;
+    constructor(bookRepository: Repository<Book>);
+    getAllBooks(): Promise<Book[]>;
+    getBookByID(id: number): Promise<Book>;
+    createBook(createBookDto: CreateBookDto): Promise<Book>;
+    updateBook(updateBookDto: UpdateBookDto): Promise<Book>;
 }

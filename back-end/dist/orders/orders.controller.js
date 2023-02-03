@@ -12,22 +12,18 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BooksController = void 0;
+exports.OrdersController = void 0;
 const common_1 = require("@nestjs/common");
-const books_service_1 = require("./books.service");
-const create_book_dto_1 = require("./dto/create-book.dto");
-let BooksController = class BooksController {
-    constructor(booksService) {
-        this.booksService = booksService;
+const orders_service_1 = require("./orders.service");
+let OrdersController = class OrdersController {
+    constructor(ordersService) {
+        this.ordersService = ordersService;
     }
-    async getAllBooks() {
-        return this.booksService.getAllBooks();
+    async getAllOrders() {
+        return await this.ordersService.getAllOrders();
     }
-    async getBookByID(id) {
-        return this.booksService.getBookByID(id);
-    }
-    async createBook(createBookDto) {
-        return await this.booksService.createBook(createBookDto);
+    async getOrderByID(id) {
+        return this.ordersService.getOrderByID(id);
     }
 };
 __decorate([
@@ -35,24 +31,17 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], BooksController.prototype, "getAllBooks", null);
+], OrdersController.prototype, "getAllOrders", null);
 __decorate([
-    (0, common_1.Get)("/:id"),
-    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    (0, common_1.Get)(":id"),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], BooksController.prototype, "getBookByID", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto]),
-    __metadata("design:returntype", Promise)
-], BooksController.prototype, "createBook", null);
-BooksController = __decorate([
-    (0, common_1.Controller)('books'),
-    __metadata("design:paramtypes", [books_service_1.BooksService])
-], BooksController);
-exports.BooksController = BooksController;
-//# sourceMappingURL=books.controller.js.map
+], OrdersController.prototype, "getOrderByID", null);
+OrdersController = __decorate([
+    (0, common_1.Controller)('orders'),
+    __metadata("design:paramtypes", [orders_service_1.OrdersService])
+], OrdersController);
+exports.OrdersController = OrdersController;
+//# sourceMappingURL=orders.controller.js.map
