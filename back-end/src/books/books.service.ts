@@ -7,6 +7,8 @@ import { Book } from './entities/book.entity';
 
 @Injectable()
 export class BooksService {
+  // Initialize a new book repository that will connect with the database and perform
+  // type orm activities
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
@@ -63,13 +65,15 @@ export class BooksService {
   }
 
   /**
-   * Adds a new book to the database.
+   * Updates a book in the database.
    * 
-   * @param createBookDto The book to be created
-   * @returns A Promise that resolves to a Book entity that was just added to the database.
+   * @param {number} id The id of the book to be updated.
+   * @param {CreateBookDto} updateBookDto The data for the new book.
+   * @throws {NotFoundException} If the book with the given ID wasn't found.
+   * @returns {Promise<Book>} A promise that resolves to the updated book.
    */
-  async updateBook(updateBookDto: UpdateBookDto): Promise<Book> {
-    const book: Book = new Book();
+  async updateBook(id: number, updateBookDto: UpdateBookDto): Promise<Book> {
+    const book: Book = await this.getBookByID(id);
 
     book.title = updateBookDto.title;
     book.author = updateBookDto.author;
@@ -79,23 +83,20 @@ export class BooksService {
     return await this.bookRepository.save(book);
   }
 
-  // async findAll(): Promise<Book[]> {
-  //   return await this.bookRepository.find();
-  // }
+  /**
+   * Deletes a book in the database.
+   * 
+   * @param {number} id The id of the book to be deleted.
+   * @throws {NotFoundException} If the book with the given ID wasn't found.
+   * @returns {Promise<void>} Nothing.
+   */
+  async deleteBook(id: number): Promise<void> {
+    const found: Book = await this.getBookByID(id);
 
-  // async findOne(id: number): Promise<Book> {
-  //   return await this.bookRepository.findOne({ where: { id } });
-  // }
-
-  // async create(book: Book): Promise<Book> {
-  //   return await this.bookRepository.save(book);
-  // }
-
-  // async update(id: number, book: Book): Promise<void> {
-  //   await this.bookRepository.update(id, book);
-  // }
-
-  // async delete(id: number): Promise<void> {
-  //   await this.bookRepository.delete(id);
-  // }
+    if (!found) {
+      throw new NotFoundException(`Book with ID ${id} not found.`);
+    }
+    
+    await this.bookRepository.delete(id);
+  }
 }
