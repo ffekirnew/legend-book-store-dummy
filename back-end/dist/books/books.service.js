@@ -16,7 +16,7 @@ exports.BooksService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const book_entity_1 = require("./entities/book.entity");
+const book_entity_1 = require("./book.entity");
 let BooksService = class BooksService {
     constructor(bookRepository) {
         this.bookRepository = bookRepository;
@@ -42,12 +42,19 @@ let BooksService = class BooksService {
         book.price = createBookDto.price;
         return await this.bookRepository.save(book);
     }
-    async updateBook(updateBookDto) {
-        const book = new book_entity_1.Book();
+    async updateBook(id, updateBookDto) {
+        const book = await this.getBookByID(id);
         book.title = updateBookDto.title;
         book.author = updateBookDto.author;
         book.price = updateBookDto.price;
         return await this.bookRepository.save(book);
+    }
+    async deleteBook(id) {
+        const found = await this.getBookByID(id);
+        if (!found) {
+            throw new common_1.NotFoundException(`Book with ID ${id} not found.`);
+        }
+        await this.bookRepository.delete(id);
     }
 };
 BooksService = __decorate([

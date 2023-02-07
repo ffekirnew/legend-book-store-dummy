@@ -14,6 +14,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersController = void 0;
 const common_1 = require("@nestjs/common");
+const create_order_dto_1 = require("./dto/create-order.dto");
+const update_order_dto_1 = require("./dto/update-order.dto");
 const orders_service_1 = require("./orders.service");
 let OrdersController = class OrdersController {
     constructor(ordersService) {
@@ -24,6 +26,15 @@ let OrdersController = class OrdersController {
     }
     async getOrderByID(id) {
         return this.ordersService.getOrderByID(id);
+    }
+    async createOrder(createOrderDto) {
+        return this.ordersService.createOrder(createOrderDto);
+    }
+    async updateOrder(id, updateOrderDto) {
+        return this.ordersService.updateOrder(id, updateOrderDto);
+    }
+    async deleteOrder(id) {
+        return this.ordersService.deleteOrder(id);
     }
 };
 __decorate([
@@ -39,6 +50,28 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "getOrderByID", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_order_dto_1.CreateOrderDto]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "createOrder", null);
+__decorate([
+    (0, common_1.Put)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_order_dto_1.UpdateOrderDto]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "updateOrder", null);
+__decorate([
+    (0, common_1.Delete)(":id"),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "deleteOrder", null);
 OrdersController = __decorate([
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [orders_service_1.OrdersService])

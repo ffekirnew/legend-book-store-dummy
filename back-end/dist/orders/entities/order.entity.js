@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Order = void 0;
+const book_entity_1 = require("../../books/book.entity");
 const typeorm_1 = require("typeorm");
 let Order = class Order {
 };
@@ -33,6 +34,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Order.prototype, "location", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => book_entity_1.Book, (book) => book.id),
+    __metadata("design:type", book_entity_1.Book)
+], Order.prototype, "book", void 0);
 Order = __decorate([
     (0, typeorm_1.Entity)()
 ], Order);
