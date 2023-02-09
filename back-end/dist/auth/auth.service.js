@@ -17,17 +17,37 @@ const common_1 = require("@nestjs/common");
 const users_entity_1 = require("./users.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
+const bcrypt = require("bcrypt");
 let AuthService = class AuthService {
     constructor(userrepo) {
         this.userrepo = userrepo;
     }
     async login(dto) {
         const { username, password } = dto;
-        return "I'm logging in";
+        const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
+        if (!theUser) {
+            throw new common_1.BadRequestException("wrong credential");
+        }
+        if (theUser.password == password) {
+            return "login successful";
+        }
+        return "username or password is incorrect";
     }
     async signup(dto) {
+        const { username, password } = dto;
+        const bufferedPass = Buffer.from(password);
+        const user = new users_entity_1.Users();
+        user.username = username;
+        user.password = await this.hashPassword(bufferedPass);
+        this.userrepo.create(user);
+        return "signup successfully ....";
     }
     async signout() {
+    }
+    async hashPassword(password) {
+        const saltOrRounds = 10;
+        const hash = await bcrypt.hash(password, saltOrRounds);
+        return hash;
     }
 };
 AuthService = __decorate([
