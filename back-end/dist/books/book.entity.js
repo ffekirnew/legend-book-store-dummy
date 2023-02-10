@@ -30,7 +30,8 @@ __decorate([
     __metadata("design:type", Number)
 ], Book.prototype, "price", void 0);
 Book = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Unique)(['title'])
 ], Book);
 exports.Book = Book;
 //# sourceMappingURL=book.entity.js.map

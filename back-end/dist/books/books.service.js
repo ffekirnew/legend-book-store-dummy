@@ -40,7 +40,14 @@ let BooksService = class BooksService {
         book.title = createBookDto.title;
         book.author = createBookDto.author;
         book.price = createBookDto.price;
-        return await this.bookRepository.save(book);
+        try {
+            return await this.bookRepository.save(book);
+        }
+        catch (error) {
+            if (error.code == 23505) {
+                throw new common_1.ConflictException(`A book with the same title already exists in the database.`);
+            }
+        }
     }
     async updateBook(id, updateBookDto) {
         const book = await this.getBookByID(id);

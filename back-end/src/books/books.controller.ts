@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './book.entity';
 
 @Controller('books')
@@ -35,6 +34,7 @@ export class BooksController {
    * Creates a new book in the database.
    * 
    * @param {CreateBookDto} createBookDto The data for the new book.
+   * @throws {ConflictException} if a book with the same title already exists in the database.
    * @returns {Promise<Book>} A promise that resolves to the newly created book.
    */
   @Post()
@@ -51,8 +51,13 @@ export class BooksController {
    * @returns {Promise<Book>} A promise that resolves to the updated book.
    */
   @Put(":id")
-  async updateBook(@Param("id", ParseIntPipe) id: number, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
-    return await this.booksService.updateBook(id, updateBookDto);
+  @HttpCode(204)
+  async updateBook(@Param("id", ParseIntPipe) id: number, @Body() createBookDto: CreateBookDto): Promise<Book> {
+    try {
+      return await this.booksService.updateBook(id, createBookDto);
+    } catch (error) {
+      return await this.createBook(createBookDto);
+    }
   }
 
   /**
@@ -63,6 +68,7 @@ export class BooksController {
    * @returns {Promise<void>} A promise that resolves to void.
    */
   @Delete(":id")
+  @HttpCode(204)
   async deleteBook(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return await this.booksService.deleteBook(id);
   }
