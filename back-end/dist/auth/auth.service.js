@@ -18,20 +18,32 @@ const users_entity_1 = require("./users.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const bcrypt = require("bcrypt");
+const jwt_1 = require("@nestjs/jwt");
+const constants_1 = require("../auth/constants");
 let AuthService = class AuthService {
-    constructor(userrepo) {
+    constructor(userrepo, jwt) {
         this.userrepo = userrepo;
+        this.jwt = jwt;
     }
-    async login(dto) {
+    async login(dto, req, res) {
         const { username, password } = dto;
         const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
         if (!theUser) {
             throw new common_1.BadRequestException("wrong credential");
         }
-        if (theUser.password == password) {
-            return "login successful";
+        const bufferedPass = Buffer.from(password);
+        const hashed = theUser.password.toString();
+        const isSame = bcrypt.compare(bufferedPass, hashed);
+        if (!isSame) {
+            throw new common_1.BadRequestException("wrong credential");
         }
-        return "username or password is incorrect";
+        const token = await this.theToken({ name: theUser.username, pass: theUser.password });
+        if (!token) {
+            throw new common_1.ForbiddenException();
+        }
+        res.cookie('middleware', token);
+        res.send();
+        return res.send("Login successful");
     }
     async signup(dto) {
         const { username, password } = dto;
@@ -49,11 +61,15 @@ let AuthService = class AuthService {
         const hash = await bcrypt.hash(password, saltOrRounds);
         return hash;
     }
+    async theToken(args) {
+        return this.jwt.signAsync(args, { secret: constants_1.jwtConstants.secret });
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.Users)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        jwt_1.JwtService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map
