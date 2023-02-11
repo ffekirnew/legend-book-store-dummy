@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+</head>
+<body>
+  <form id="add-book-form">
+    <div>
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" required>
+    </div>
+    <div>
+      <label for="author">Author:</label>
+      <input type="text" id="author" name="author" required>
+    </div>
+    <div>
+      <label for="category">Category:</label>
+      <input type="text" id="category" name="category" required>
+    </div>
+    <div>
+      <label for="backgroundStory">Background Story:</label>
+      <textarea id="backgroundStory" name="backgroundStory" required></textarea>
+    </div>
+    <div>
+      <label for="exampleQuote">Example Quote:</label>
+      <textarea id="exampleQuote" name="exampleQuote" required></textarea>
+    </div>
+    <div>
+      <label for="synopsis">Synopsis:</label>
+      <textarea id="synopsisInput" name="synopsis" required></textarea>
+    </div>
+    <div>
+      <label for="price">Price:</label>
+      <input type="text" id="price" name="price" required>
+    </div>
+    <div>
+      <label for="coverImage">Cover Image:</label>
+      <input type="file" id="coverImage" name="coverImage" accept="image/*" required>
+    </div>
+    <div>
+      <label for="audioDescription">Audio Description:</label>
+      <input type="file" id="audioDescription" name="audioDescription" accept="audio/*" required>
+    </div>
+    <button type="submit">Add Book</button>
+  </form>
+  <script src="main.js"></script>
+</body>
+</html>

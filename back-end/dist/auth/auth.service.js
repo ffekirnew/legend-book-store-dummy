@@ -28,9 +28,7 @@ let AuthService = class AuthService {
         if (!theUser) {
             throw new common_1.BadRequestException("wrong credential");
         }
-        if (theUser.password == password) {
-            return "login successful";
-        }
+        const bufferedPass = Buffer.from(password);
         return "username or password is incorrect";
     }
     async signup(dto) {

@@ -18,50 +18,20 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const book_entity_1 = require("./book.entity");
 let BooksService = class BooksService {
-    constructor(bookRepository) {
-        this.bookRepository = bookRepository;
+    constructor(booksRepository) {
+        this.booksRepository = booksRepository;
     }
-    async getAllBooks() {
-        const books = await this.bookRepository.find();
-        if (!books) {
-            throw new common_1.NotFoundException(`No books are found in the database.`);
-        }
-        return books;
-    }
-    async getBookByID(id) {
-        const found = await this.bookRepository.findOne({ where: { id } });
-        if (!found) {
-            throw new common_1.NotFoundException(`Book with ID ${id} not found.`);
-        }
-        return found;
-    }
-    async createBook(createBookDto) {
+    async addBook(createBookDto) {
         const book = new book_entity_1.Book();
         book.title = createBookDto.title;
         book.author = createBookDto.author;
+        book.category = createBookDto.category;
+        book.backgroundStory = createBookDto.backgroundStory;
+        book.exampleQuote = createBookDto.exampleQuote;
         book.price = createBookDto.price;
-        try {
-            return await this.bookRepository.save(book);
-        }
-        catch (error) {
-            if (error.code == 23505) {
-                throw new common_1.ConflictException(`A book with the same title already exists in the database.`);
-            }
-        }
-    }
-    async updateBook(id, updateBookDto) {
-        const book = await this.getBookByID(id);
-        book.title = updateBookDto.title;
-        book.author = updateBookDto.author;
-        book.price = updateBookDto.price;
-        return await this.bookRepository.save(book);
-    }
-    async deleteBook(id) {
-        const found = await this.getBookByID(id);
-        if (!found) {
-            throw new common_1.NotFoundException(`Book with ID ${id} not found.`);
-        }
-        await this.bookRepository.delete(id);
+        book.coverImageUrl = createBookDto.coverImageUrl;
+        book.audioDescriptionUrl = createBookDto.audioDescriptionUrl;
+        return this.booksRepository.save(book);
     }
 };
 BooksService = __decorate([

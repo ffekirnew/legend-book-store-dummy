@@ -1,3 +1,4 @@
+
 import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
@@ -13,5 +14,23 @@ export class Book {
   author: string;
 
   @Column()
-  price: number;
+  category: string;
+
+  @Column()
+  backgroundStory: string;
+
+  @Column()
+  exampleQuote: string;
+
+  @Column()
+  synopsis: string;
+
+  @Column()
+  price: string;
+
+  @Column()
+  coverImageUrl: string;
+
+  @Column()
+  audioDescriptionUrl: string;
 }

@@ -1,5 +1,11 @@
 export declare class CreateBookDto {
     title: string;
     author: string;
-    price: number;
+    category: string;
+    backgroundStory: string;
+    exampleQuote: string;
+    synopsis: string;
+    price: string;
+    coverImageUrl: string;
+    audioDescriptionUrl: string;
 }
