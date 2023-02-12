@@ -9,20 +9,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Users = void 0;
+exports.User = void 0;
 const typeorm_1 = require("typeorm");
-let Users = class Users {
+const bcrypt = require("bcrypt");
+let User = class User {
+    async checkPassword(password) {
+        const newPassword = await bcrypt.hash(password, this.salt);
+        return this.password == newPassword;
+    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", String)
-], Users.prototype, "username", void 0);
+    __metadata("design:type", Number)
+], User.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Users.prototype, "password", void 0);
-Users = __decorate([
-    (0, typeorm_1.Entity)()
-], Users);
-exports.Users = Users;
-//# sourceMappingURL=users.entity.js.map
+], User.prototype, "username", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], User.prototype, "salt", void 0);
+User = __decorate([
+    (0, typeorm_1.Entity)(),
+    (0, typeorm_1.Unique)(['username'])
+], User);
+exports.User = User;
+//# sourceMappingURL=user.entity.js.map

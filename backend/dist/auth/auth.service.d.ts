@@ -1,12 +1,10 @@
-/// <reference types="node" />
-import { Users } from 'src/auth/users.entity';
 import { Repository } from 'typeorm';
-import { AuthDto } from './dto/auth.dto';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { User } from './entities/user.entity';
 export declare class AuthService {
-    private readonly userrepo;
-    constructor(userrepo: Repository<Users>);
-    login(dto: AuthDto): Promise<string>;
-    signup(dto: AuthDto): Promise<string>;
-    signout(): Promise<void>;
-    hashPassword(password: Buffer): Promise<string>;
+    private userRepository;
+    constructor(userRepository: Repository<User>);
+    signUp(authCredentialsDto: AuthCredentialsDto): Promise<void>;
+    logIn(authCredentialsDto: AuthCredentialsDto): Promise<"login" | "no access.">;
+    hashPassword(password: string, salt: string): Promise<string>;
 }

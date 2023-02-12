@@ -15,41 +15,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
-const auth_dto_1 = require("./dto/auth.dto");
+const auth_credentials_dto_1 = require("./dto/auth-credentials.dto");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    login(dto) {
-        return this.authService.login(dto);
+    signUp(authCredentialsDto) {
+        return this.authService.signUp(authCredentialsDto);
     }
-    signup(dto) {
-        return this.authService.signup(dto);
-    }
-    signout() {
-        return this.authService.signout();
+    logIn(authCredentialsDto) {
     }
 };
 __decorate([
-    (0, common_1.Post)('login'),
+    (0, common_1.Post)("signup"),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_credentials_dto_1.AuthCredentialsDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "signUp", null);
+__decorate([
+    (0, common_1.Post)("login"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.AuthDto]),
+    __metadata("design:paramtypes", [auth_credentials_dto_1.AuthCredentialsDto]),
     __metadata("design:returntype", void 0)
-], AuthController.prototype, "login", null);
-__decorate([
-    (0, common_1.Post)('signup'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.AuthDto]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "signup", null);
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "signout", null);
+], AuthController.prototype, "logIn", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

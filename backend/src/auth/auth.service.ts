@@ -1,71 +1,48 @@
-import { Injectable,BadRequestException } from '@nestjs/common';
-import { Users } from 'src/auth/users.entity';
+import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equal, Repository } from 'typeorm';
-import { AuthDto } from './dto/auth.dto';
-import { equal } from 'assert';
+import { Repository } from 'typeorm';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { User } from './entities/user.entity';
 import * as bcrypt from "bcrypt";
-
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectRepository(Users)
-    private readonly userrepo: Repository<Users>,)
-    //I can do CRUD now...
-    {}
+    constructor (
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+    ) {}
 
-    /**
-     * logs in administrators
-     */
-    async login(dto:AuthDto) {
+    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+        const user: User = new User();
 
-        const {username,password} = dto
-        const theUser = await this.userrepo.findOne({where:{username:Equal(username)}})
-        if(!theUser){
-            throw new BadRequestException("wrong credential")
+        user.salt = await bcrypt.genSalt();
+        user.username = authCredentialsDto.username;
+        user.password = await this.hashPassword(authCredentialsDto.password, user.salt);
+
+        try {
+            await this.userRepository.save(user);
+        } catch (error) {
+            if (error.code == "23505") {
+                throw new ConflictException(`User with the username ${user.username} already exists. Pick another username.`);
+            } else {
+                throw new InternalServerErrorException();
+            }
         }
-        // if (theUser.password == password){
-        //      return "login successful"
-        // }
-        const bufferedPass = Buffer.from(password)
-
-        return "username or password is incorrect"
-         
-
-       
-    }
-    
-    /**
-     * signs up new users
-     */
-    async signup(dto:AuthDto) {
-        const {username,password} = dto
-        
-        const bufferedPass = Buffer.from(password)
-
-        const user = new Users()
-        user.username = username
-        user.password = await this.hashPassword(bufferedPass);
-
-        this.userrepo.create(user)
-
-        return "signup successfully ...."
-
-        // check the database entry...
-
-
-
-    }
-    async signout(){
-
     }
 
-    async hashPassword(password:Buffer){
-        const saltOrRounds = 10
-        const hash = await bcrypt.hash(password, saltOrRounds);
-        return hash
-    }
-    // async comparePass(){
+    async logIn(authCredentialsDto: AuthCredentialsDto) {
+        let { username, password } = authCredentialsDto;
 
-    // }
+        const user: User = await this.userRepository.findOne({ where: { username } });
+
+        if (user && user.checkPassword(password)) {
+            return "login";
+        } else {
+            return "no access.";
+        }
+    }
+
+    async hashPassword(password: string, salt: string): Promise<string> {
+        return await bcrypt.hash(password, salt);
+    }
 }

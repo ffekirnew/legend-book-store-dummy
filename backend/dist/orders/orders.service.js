@@ -15,13 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const books_controller_1 = require("../books/books.controller");
+const book_entity_1 = require("../books/book.entity");
 const typeorm_2 = require("typeorm");
 const order_entity_1 = require("./entities/order.entity");
 let OrdersService = class OrdersService {
-    constructor(orderRepository, booksController) {
+    constructor(orderRepository) {
         this.orderRepository = orderRepository;
-        this.booksController = booksController;
     }
     async getAllOrders() {
         const orders = await this.orderRepository.find();
@@ -43,7 +42,7 @@ let OrdersService = class OrdersService {
         newOrder.lastName = createOrderDto.lastName;
         newOrder.phone = createOrderDto.phone;
         newOrder.location = createOrderDto.location;
-        newOrder.book = await this.booksController.getBookByID(createOrderDto.bookId);
+        newOrder.book = new book_entity_1.Book();
         return await this.orderRepository.save(newOrder);
     }
     async updateOrder(id, updateOrderDto) {
@@ -70,8 +69,7 @@ let OrdersService = class OrdersService {
 OrdersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(order_entity_1.Order)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
-        books_controller_1.BooksController])
+    __metadata("design:paramtypes", [typeorm_2.Repository])
 ], OrdersService);
 exports.OrdersService = OrdersService;
 //# sourceMappingURL=orders.service.js.map

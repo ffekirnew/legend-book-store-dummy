@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/auth/entities/user.entity';
 import { Book } from 'src/books/book.entity';
-import { Users } from 'src/auth/users.entity';
 import { Order } from 'src/orders/entities/order.entity';
 
 @Module({
@@ -13,10 +13,10 @@ import { Order } from 'src/orders/entities/order.entity';
       username: 'postgres',
       password: 'postgres',
       database: 'legendbookstore',
-      entities: [Book, Order, Users],
+      entities: [Book, Order, User],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Book, Order]),
+    TypeOrmModule.forFeature([Book, Order, User]),
   ],
 })
 export class DatabaseModule {}

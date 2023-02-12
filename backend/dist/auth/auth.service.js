@@ -14,43 +14,48 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const users_entity_1 = require("./users.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
+const user_entity_1 = require("./entities/user.entity");
 const bcrypt = require("bcrypt");
 let AuthService = class AuthService {
-    constructor(userrepo) {
-        this.userrepo = userrepo;
+    constructor(userRepository) {
+        this.userRepository = userRepository;
     }
-    async login(dto) {
-        const { username, password } = dto;
-        const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
-        if (!theUser) {
-            throw new common_1.BadRequestException("wrong credential");
+    async signUp(authCredentialsDto) {
+        const user = new user_entity_1.User();
+        user.salt = await bcrypt.genSalt();
+        user.username = authCredentialsDto.username;
+        user.password = await this.hashPassword(authCredentialsDto.password, user.salt);
+        try {
+            await this.userRepository.save(user);
         }
-        const bufferedPass = Buffer.from(password);
-        return "username or password is incorrect";
+        catch (error) {
+            if (error.code == "23505") {
+                throw new common_1.ConflictException(`User with the username ${user.username} already exists. Pick another username.`);
+            }
+            else {
+                throw new common_1.InternalServerErrorException();
+            }
+        }
     }
-    async signup(dto) {
-        const { username, password } = dto;
-        const bufferedPass = Buffer.from(password);
-        const user = new users_entity_1.Users();
-        user.username = username;
-        user.password = await this.hashPassword(bufferedPass);
-        this.userrepo.create(user);
-        return "signup successfully ....";
+    async logIn(authCredentialsDto) {
+        let { username, password } = authCredentialsDto;
+        const user = await this.userRepository.findOne({ where: { username } });
+        if (user && user.checkPassword(password)) {
+            return "login";
+        }
+        else {
+            return "no access.";
+        }
     }
-    async signout() {
-    }
-    async hashPassword(password) {
-        const saltOrRounds = 10;
-        const hash = await bcrypt.hash(password, saltOrRounds);
-        return hash;
+    async hashPassword(password, salt) {
+        return await bcrypt.hash(password, salt);
     }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(users_entity_1.Users)),
+    __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], AuthService);
 exports.AuthService = AuthService;

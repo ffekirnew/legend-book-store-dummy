@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BooksController } from 'src/books/books.controller';
+import { Book } from 'src/books/book.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -11,7 +11,6 @@ export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
-    private readonly booksController: BooksController,
   ) {}
 
   /**
@@ -59,7 +58,7 @@ export class OrdersService {
     newOrder.lastName = createOrderDto.lastName;
     newOrder.phone = createOrderDto.phone;
     newOrder.location = createOrderDto.location;
-    newOrder.book = await this.booksController.getBookByID(createOrderDto.bookId);
+    newOrder.book = new Book();
 
     return await this.orderRepository.save(newOrder);
   }
