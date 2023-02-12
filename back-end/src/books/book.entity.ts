@@ -26,11 +26,8 @@ export class Book {
   synopsis: string;
 
   @Column()
-  price: string;
+  price: number;
 
   @Column()
-  coverImageUrl: string;
-
-  @Column()
-  audioDescriptionUrl: string;
+  coverImage: string;
 }

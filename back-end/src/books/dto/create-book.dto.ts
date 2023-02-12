@@ -5,7 +5,6 @@ export class CreateBookDto {
     backgroundStory: string;
     exampleQuote: string;
     synopsis: string;
-    price: string;
-    coverImageUrl: string;
-    audioDescriptionUrl: string;
+    price: number;
+    coverImage: string;
   }

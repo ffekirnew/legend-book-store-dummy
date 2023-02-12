@@ -43,16 +43,12 @@ __decorate([
 ], Book.prototype, "synopsis", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], Book.prototype, "price", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Book.prototype, "coverImageUrl", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Book.prototype, "audioDescriptionUrl", void 0);
+], Book.prototype, "coverImage", void 0);
 Book = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['title'])

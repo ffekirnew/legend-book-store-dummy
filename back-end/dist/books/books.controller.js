@@ -22,9 +22,8 @@ let BooksController = class BooksController {
     constructor(booksService) {
         this.booksService = booksService;
     }
-    async addBook(createBookDto, coverImage, audioDescription, req) {
-        createBookDto.coverImageUrl = coverImage.filename;
-        createBookDto.audioDescriptionUrl = audioDescription.filename;
+    async addBook(createBookDto, coverImage, req) {
+        createBookDto.coverImage = coverImage.filename;
         return this.booksService.addBook(createBookDto);
     }
 };
@@ -39,21 +38,11 @@ __decorate([
             },
         }),
     })),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('audioDescription', {
-        storage: (0, multer_1.diskStorage)({
-            destination: './files',
-            filename: (req, file, cb) => {
-                const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-                cb(null, `${randomName}-${file.originalname}`);
-            },
-        }),
-    })),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
-    __param(2, (0, common_1.UploadedFile)()),
-    __param(3, (0, common_1.Req)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto, Object, Object, Object]),
+    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "addBook", null);
 BooksController = __decorate([

@@ -3,5 +3,5 @@ import { BooksService } from './books.service';
 export declare class BooksController {
     private readonly booksService;
     constructor(booksService: BooksService);
-    addBook(createBookDto: CreateBookDto, coverImage: any, audioDescription: any, req: any): Promise<import("./book.entity").Book>;
+    addBook(createBookDto: CreateBookDto, coverImage: any, req: any): Promise<import("./book.entity").Book>;
 }

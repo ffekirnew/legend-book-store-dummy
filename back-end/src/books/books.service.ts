@@ -20,8 +20,7 @@ export class BooksService {
     book.backgroundStory = createBookDto.backgroundStory;
     book.exampleQuote = createBookDto.exampleQuote;
     book.price = createBookDto.price;
-    book.coverImageUrl = createBookDto.coverImageUrl;
-    book.audioDescriptionUrl = createBookDto.audioDescriptionUrl;
+    book.coverImage = createBookDto.coverImage;
 
     return this.booksRepository.save(book);
   }

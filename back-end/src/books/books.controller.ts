@@ -20,25 +20,12 @@ export class BooksController {
       }),
     }),
   )
-  @UseInterceptors(
-    FileInterceptor('audioDescription', {
-      storage: diskStorage({
-        destination: './files',
-        filename: (req, file, cb) => {
-          const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-          cb(null, `${randomName}-${file.originalname}`);
-        },
-      }),
-    }),
-  )
   async addBook(
     @Body() createBookDto: CreateBookDto,
     @UploadedFile() coverImage,
-    @UploadedFile() audioDescription,
     @Req() req,
   ) {
-    createBookDto.coverImageUrl = coverImage.filename;
-    createBookDto.audioDescriptionUrl = audioDescription.filename;
+    createBookDto.coverImage = coverImage.filename;
 
     return this.booksService.addBook(createBookDto);
   }
