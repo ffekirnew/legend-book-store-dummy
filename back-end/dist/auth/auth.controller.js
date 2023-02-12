@@ -22,13 +22,16 @@ let AuthController = class AuthController {
     }
     login(req, res) {
         const dto = req.Body;
-        return this.authService.login(dto, req, res);
+        return this.authService.login(dto, res);
     }
     signup(dto) {
         return this.authService.signup(dto);
     }
-    signout() {
-        return this.authService.signout();
+    signout(dto) {
+        return this.authService.signout(dto);
+    }
+    logout(req, res) {
+        return this.authService.logout(req, res);
     }
 };
 __decorate([
@@ -47,11 +50,20 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signup", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Post)('signout'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [auth_dto_1.AuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signout", null);
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logout", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

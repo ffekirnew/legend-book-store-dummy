@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBookDto } from './dto/create-book.dto';
@@ -51,6 +51,7 @@ export class BooksService {
    * Adds a new book to the database.
    * 
    * @param createBookDto The book to be created
+   * @throws {ConflictException} if a book with the same title already exists in the database.
    * @returns A Promise that resolves to a Book entity that was just added to the database.
    */
   async createBook(createBookDto: CreateBookDto): Promise<Book> {
@@ -61,7 +62,13 @@ export class BooksService {
     book.price = createBookDto.price;
 
     // Add the book to the database
-    return await this.bookRepository.save(book);
+    try {
+      return await this.bookRepository.save(book);
+    } catch (error) {
+      if (error.code == 23505) {
+        throw new ConflictException(`A book with the same title already exists in the database.`)
+      }
+    }
   }
 
   /**

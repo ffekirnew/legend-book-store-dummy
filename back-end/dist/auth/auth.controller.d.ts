@@ -6,5 +6,6 @@ export declare class AuthController {
     constructor(authService: AuthService);
     login(req: any, res: any): Promise<import("express").Response<any, Record<string, any>>>;
     signup(dto: AuthDto): Promise<string>;
-    signout(): Promise<void>;
+    signout(dto: AuthDto): Promise<string>;
+    logout(req: any, res: any): Promise<string>;
 }

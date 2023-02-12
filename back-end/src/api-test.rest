@@ -1,0 +1,31 @@
+# GET /books Returns all books
+# GET http://localhost:3000/books HTTP/1.1
+
+# GET /books/:id returns a specific book by its ID
+# GET http://localhost:3000/books/2 HTTP/1.1
+
+# GET /books?searchKey=key returns all books matching the key ‘key’
+
+# POST /books creates a new book
+POST http://localhost:3000/books/ HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Legend of The Fall -- 2",
+  "author": "At the dorm",
+  "price": 5
+}
+
+# PUT /books/:id updates a specific book
+# PUT http://localhost:3000/books/40 HTTP/1.1
+# content-type: application/json
+
+# {
+#   "title": "Legend of The Fall -- 4",
+#   "author": "At the dorm",
+#   "price": 5
+# }
+
+# DELETE /books/:id deletes a specific book
+# DELETE http://localhost:3000/books/18 HTTP/1.1
+

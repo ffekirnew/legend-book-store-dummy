@@ -23,7 +23,7 @@ export class AuthService {
     /**
      * logs in administrators
      */
-    async login(dto:AuthDto,req: Request ,res:Response) {
+    async login(dto:AuthDto,res:Response) {
 
         const {username,password} = dto
         const theUser = await this.userrepo.findOne({where:{username:Equal(username)}})
@@ -57,25 +57,40 @@ export class AuthService {
      * signs up new users
      */
     async signup(dto:AuthDto) {
-        const {username,password} = dto
-        
-        const bufferedPass = Buffer.from(password)
 
+        const {username,password} = dto 
+        // check the database entry for the user...
+
+        const theUser = await this.userrepo.findOne({where:{username:Equal(username)}})
+        if(theUser){
+            throw new BadRequestException("username already taken")
+        }
+
+        const bufferedPass = Buffer.from(password)   // to match the type
         const user = new Users()
         user.username = username
-        user.password = await this.hashPassword(bufferedPass);
+        user.password = await this.hashPassword(bufferedPass); // using the encrypted password
 
-        this.userrepo.create(user)
+        this.userrepo.create(user) 
+
 
         return "signup successfully ...."
 
-        // check the database entry...
-
-
 
     }
-    async signout(){
+    async signout(dto:AuthDto){
+        // delete the user until he decided to register again
+        const {username,password} = dto 
+        const theUser = await this.userrepo.findOne({where:{username:Equal(username)}})
+        await this.userrepo.delete({username:username})
 
+        return "wish you come back again"
+
+    }
+    async logout(req:Request,res:Response){
+        // the user might want to log out but not permanently break his bond with the app... 
+        res.clearCookie('middleware')
+        return "logout successful"
     }
 
     async hashPassword(password:Buffer){

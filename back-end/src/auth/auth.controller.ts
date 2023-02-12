@@ -13,7 +13,7 @@ export class AuthController {
   @Post('login')
   login(@Req() req, @Res() res) {
     const dto = req.Body
-    return this.authService.login(dto,req, res);
+    return this.authService.login(dto, res);
   }
 
   /**
@@ -23,8 +23,12 @@ export class AuthController {
   signup(@Body() dto:AuthDto) {
     return this.authService.signup(dto);
   }
+  @Post('signout')
+  signout(@Body() dto:AuthDto){
+    return this.authService.signout(dto);
+  }
   @Get()
-  signout(){
-    return this.authService.signout();
+  logout(@Req() req, @Res() res){
+      return this.authService.logout(req,res)
   }
 }

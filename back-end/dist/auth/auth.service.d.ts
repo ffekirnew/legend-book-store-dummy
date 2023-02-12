@@ -8,9 +8,10 @@ export declare class AuthService {
     private readonly userrepo;
     private jwt;
     constructor(userrepo: Repository<Users>, jwt: JwtService);
-    login(dto: AuthDto, req: Request, res: Response): Promise<Response<any, Record<string, any>>>;
+    login(dto: AuthDto, res: Response): Promise<Response<any, Record<string, any>>>;
     signup(dto: AuthDto): Promise<string>;
-    signout(): Promise<void>;
+    signout(dto: AuthDto): Promise<string>;
+    logout(req: Request, res: Response): Promise<string>;
     hashPassword(password: Buffer): Promise<string>;
     theToken(args: {
         name: any;

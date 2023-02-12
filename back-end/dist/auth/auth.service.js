@@ -25,7 +25,7 @@ let AuthService = class AuthService {
         this.userrepo = userrepo;
         this.jwt = jwt;
     }
-    async login(dto, req, res) {
+    async login(dto, res) {
         const { username, password } = dto;
         const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
         if (!theUser) {
@@ -47,6 +47,10 @@ let AuthService = class AuthService {
     }
     async signup(dto) {
         const { username, password } = dto;
+        const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
+        if (theUser) {
+            throw new common_1.BadRequestException("username already taken");
+        }
         const bufferedPass = Buffer.from(password);
         const user = new users_entity_1.Users();
         user.username = username;
@@ -54,7 +58,15 @@ let AuthService = class AuthService {
         this.userrepo.create(user);
         return "signup successfully ....";
     }
-    async signout() {
+    async signout(dto) {
+        const { username, password } = dto;
+        const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
+        await this.userrepo.delete({ username: username });
+        return "wish you come back again";
+    }
+    async logout(req, res) {
+        res.clearCookie('middleware');
+        return "logout successful";
     }
     async hashPassword(password) {
         const saltOrRounds = 10;
