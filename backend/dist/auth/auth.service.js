@@ -43,14 +43,10 @@ let AuthService = class AuthService {
         let { username, password } = authCredentialsDto;
         const user = await this.userRepository.findOne({ where: { username } });
         if (user && await user.checkPassword(password)) {
-            console.log(user.checkPassword(password));
-            return "login";
-        }
-        else if (user == null) {
-            throw new common_1.NotFoundException(`That username doesn't exist.`);
+            return true;
         }
         else {
-            throw new common_1.BadRequestException(`The username and the password don't match.`);
+            return false;
         }
     }
     async hashPassword(password, salt) {

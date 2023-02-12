@@ -23,8 +23,14 @@ let AuthController = class AuthController {
     signUp(authCredentialsDto) {
         return this.authService.signUp(authCredentialsDto);
     }
-    logIn(authCredentialsDto) {
-        return this.authService.logIn(authCredentialsDto);
+    async logIn(authCredentialsDto) {
+        const loginSucess = await this.authService.logIn(authCredentialsDto);
+        if (loginSucess) {
+            return `login successful.`;
+        }
+        else {
+            throw new common_1.UnauthorizedException(`Something is wrong.`);
+        }
     }
 };
 __decorate([

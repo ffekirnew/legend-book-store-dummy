@@ -1,16 +1,18 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from "bcrypt";
-import { NotFoundError } from 'rxjs';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
     constructor (
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        private jwtService: JwtService,
     ) {}
 
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
@@ -31,22 +33,33 @@ export class AuthService {
         }
     }
 
-    async logIn(authCredentialsDto: AuthCredentialsDto) {
+    async logIn(authCredentialsDto: AuthCredentialsDto, res): Promise<boolean> {
         let { username, password } = authCredentialsDto;
 
         const user: User = await this.userRepository.findOne({ where: { username } });
 
-        if (user && await user.checkPassword(password)) {
-            console.log(user.checkPassword(password));
-            return "login";
-        } else if (user == null) {
-            throw new NotFoundException(`That username doesn't exist.`);
-        } else {
-            throw new BadRequestException(`The username and the password don't match.`);
+        if ( !( user && await user.checkPassword(password) ) ) {
+            return false
         }
+
+        const userToken = await this.generateToken(username, password);
+
+        if (!userToken) {
+            throw new ForbiddenException();
+        }
+
+        res.cookie('jwtMiddleware', userToken);
+        res.send();
+
+        return true;
+
     }
 
     async hashPassword(password: string, salt: string): Promise<string> {
         return await bcrypt.hash(password, salt);
+    }
+
+    async generateToken(username: string, password: string): Promise<string> {
+        return await this.jwtService.signAsync( { username, password },  { secret: "myname" });
     }
 }
