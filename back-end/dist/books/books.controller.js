@@ -16,6 +16,7 @@ exports.BooksController = void 0;
 const common_1 = require("@nestjs/common");
 const books_service_1 = require("./books.service");
 const create_book_dto_1 = require("./dto/create-book.dto");
+const update_book_dto_1 = require("./dto/update-book.dto");
 let BooksController = class BooksController {
     constructor(booksService) {
         this.booksService = booksService;
@@ -28,6 +29,12 @@ let BooksController = class BooksController {
     }
     async createBook(createBookDto) {
         return await this.booksService.createBook(createBookDto);
+    }
+    async updateBook(id, updateBookDto) {
+        return await this.booksService.updateBook(id, updateBookDto);
+    }
+    async deleteBook(id) {
+        return await this.booksService.deleteBook(id);
     }
 };
 __decorate([
@@ -50,6 +57,21 @@ __decorate([
     __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto]),
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "createBook", null);
+__decorate([
+    (0, common_1.Put)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_book_dto_1.UpdateBookDto]),
+    __metadata("design:returntype", Promise)
+], BooksController.prototype, "updateBook", null);
+__decorate([
+    (0, common_1.Delete)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], BooksController.prototype, "deleteBook", null);
 BooksController = __decorate([
     (0, common_1.Controller)('books'),
     __metadata("design:paramtypes", [books_service_1.BooksService])

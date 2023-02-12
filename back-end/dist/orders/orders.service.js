@@ -35,6 +35,34 @@ let OrdersService = class OrdersService {
         }
         return found;
     }
+    async createOrder(createOrderDto) {
+        const newOrder = new order_entity_1.Order();
+        newOrder.firstName = createOrderDto.firstName;
+        newOrder.lastName = createOrderDto.lastName;
+        newOrder.phone = createOrderDto.phone;
+        newOrder.location = createOrderDto.location;
+        return await this.orderRepository.save(newOrder);
+    }
+    async updateOrder(id, updateOrderDto) {
+        const order = await this.getOrderByID(id);
+        if (!order) {
+            throw new common_1.NotFoundException(`Order with id ${id} not found.`);
+        }
+        else {
+            order.firstName = updateOrderDto.firstName;
+            order.lastName = updateOrderDto.lastName;
+            order.phone = updateOrderDto.phone;
+            order.location = updateOrderDto.location;
+            return await this.orderRepository.save(order);
+        }
+    }
+    async deleteOrder(id) {
+        const found = this.getOrderByID(id);
+        if (!found) {
+            throw new common_1.NotFoundException(`Book with id ${id} not found.`);
+        }
+        await this.orderRepository.delete(id);
+    }
 };
 OrdersService = __decorate([
     (0, common_1.Injectable)(),

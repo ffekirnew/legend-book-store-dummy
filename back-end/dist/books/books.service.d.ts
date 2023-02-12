@@ -8,5 +8,6 @@ export declare class BooksService {
     getAllBooks(): Promise<Book[]>;
     getBookByID(id: number): Promise<Book>;
     createBook(createBookDto: CreateBookDto): Promise<Book>;
-    updateBook(updateBookDto: UpdateBookDto): Promise<Book>;
+    updateBook(id: number, updateBookDto: UpdateBookDto): Promise<Book>;
+    deleteBook(id: number): Promise<void>;
 }
