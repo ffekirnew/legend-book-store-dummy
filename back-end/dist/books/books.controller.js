@@ -30,15 +30,15 @@ let BooksController = class BooksController {
     async getBookByID(id) {
         return this.booksService.getBookByID(id);
     }
-    async createBook(createBookDto, coverImage, req) {
-        createBookDto.coverImage = coverImage.filename;
-        return this.booksService.createBook(createBookDto);
-    }
     async getImage(id, res) {
         const imagePath = "./files/" + await this.booksService.getBookCover(id);
         const image = fs.readFileSync(imagePath);
         res.contentType('image/jpg');
         res.send(image);
+    }
+    async createBook(createBookDto, coverImage, req) {
+        createBookDto.coverImage = coverImage.filename;
+        return this.booksService.createBook(createBookDto);
     }
     async updateBook(id, updateBookDto) {
         return await this.booksService.updateBook(id, updateBookDto);
@@ -61,6 +61,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "getBookByID", null);
 __decorate([
+    (0, common_1.Get)("/:id/cover"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], BooksController.prototype, "getImage", null);
+__decorate([
     (0, common_1.Post)(),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('coverImage', {
         storage: (0, multer_1.diskStorage)({
@@ -79,15 +87,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "createBook", null);
 __decorate([
-    (0, common_1.Get)("/:id/cover"),
-    __param(0, (0, common_1.Param)("id")),
-    __param(1, (0, common_1.Res)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], BooksController.prototype, "getImage", null);
-__decorate([
     (0, common_1.Put)(":id"),
+    (0, common_1.HttpCode)(204),
     __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -96,6 +97,7 @@ __decorate([
 ], BooksController.prototype, "updateBook", null);
 __decorate([
     (0, common_1.Delete)(":id"),
+    (0, common_1.HttpCode)(204),
     __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
