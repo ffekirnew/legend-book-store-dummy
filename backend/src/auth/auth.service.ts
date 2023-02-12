@@ -1,9 +1,10 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from "bcrypt";
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -35,10 +36,13 @@ export class AuthService {
 
         const user: User = await this.userRepository.findOne({ where: { username } });
 
-        if (user && user.checkPassword(password)) {
+        if (user && await user.checkPassword(password)) {
+            console.log(user.checkPassword(password));
             return "login";
+        } else if (user == null) {
+            throw new NotFoundException(`That username doesn't exist.`);
         } else {
-            return "no access.";
+            throw new BadRequestException(`The username and the password don't match.`);
         }
     }
 

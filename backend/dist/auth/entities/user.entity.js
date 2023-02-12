@@ -15,7 +15,7 @@ const bcrypt = require("bcrypt");
 let User = class User {
     async checkPassword(password) {
         const newPassword = await bcrypt.hash(password, this.salt);
-        return this.password == newPassword;
+        return this.password === newPassword;
     }
 };
 __decorate([

@@ -9,7 +9,7 @@ export declare class BooksController {
     getAllBooks(): Promise<Book[]>;
     getBookByID(id: number): Promise<Book>;
     getImage(id: number, res: Response): Promise<void>;
-    createBook(createBookDto: CreateBookDto, coverImage: any, req: any): Promise<Book>;
+    createBook(createBookDto: CreateBookDto, coverImage: any): Promise<Book>;
     updateBook(id: number, updateBookDto: UpdateBookDto): Promise<Book>;
     deleteBook(id: number): Promise<void>;
 }

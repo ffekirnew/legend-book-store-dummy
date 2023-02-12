@@ -36,7 +36,7 @@ let BooksController = class BooksController {
         res.contentType('image/jpg');
         res.send(image);
     }
-    async createBook(createBookDto, coverImage, req) {
+    async createBook(createBookDto, coverImage) {
         createBookDto.coverImage = coverImage.filename;
         return this.booksService.createBook(createBookDto);
     }
@@ -81,9 +81,8 @@ __decorate([
     })),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
-    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto, Object, Object]),
+    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto, Object]),
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "createBook", null);
 __decorate([

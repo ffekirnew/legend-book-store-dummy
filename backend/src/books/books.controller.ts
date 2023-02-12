@@ -72,7 +72,6 @@ export class BooksController {
   async createBook(
     @Body() createBookDto: CreateBookDto,
     @UploadedFile() coverImage,
-    @Req() req,
   ) {
     createBookDto.coverImage = coverImage.filename;
 

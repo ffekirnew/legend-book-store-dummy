@@ -24,6 +24,7 @@ let AuthController = class AuthController {
         return this.authService.signUp(authCredentialsDto);
     }
     logIn(authCredentialsDto) {
+        return this.authService.logIn(authCredentialsDto);
     }
 };
 __decorate([
@@ -38,7 +39,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_credentials_dto_1.AuthCredentialsDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logIn", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),

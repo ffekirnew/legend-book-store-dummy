@@ -51,10 +51,20 @@
 # DELETE http://localhost:3000/orders/1
 
 
-POST http://localhost:3000/auth/signup HTTP/1.1
-Content-Type: application/json
+# POST http://localhost:3000/auth/signup HTTP/1.1
+# Content-Type: application/json
 
-{
-    "username": "f;aj;aa",
-    "password": "Fiker!789"
-}
+# {
+#     "username": "f;aj;aa",
+#     "password": "Fiker!789"
+# }
+
+# POST http://localhost:3000/auth/login HTTP/1.1
+# Content-Type: application/json
+
+# {
+#     "username": "f;aj;aa",
+#     "password": "Fikr!79"
+# }
+
+GET http://localhost:3000/auth/ HTTP/1.1
