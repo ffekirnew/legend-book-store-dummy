@@ -24,7 +24,7 @@ export class AuthService {
      * logs in administrators
      */
     async login(dto:AuthDto,res:Response) {
-
+        console.log('Im in')
         const {username,password} = dto
         const theUser = await this.userrepo.findOne({where:{username:Equal(username)}})
         if(!theUser){

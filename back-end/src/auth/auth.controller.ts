@@ -11,8 +11,7 @@ export class AuthController {
    * 
    */
   @Post('login')
-  login(@Req() req, @Res() res) {
-    const dto = req.Body
+  login(@Body() dto, @Res() res) {
     return this.authService.login(dto, res);
   }
 

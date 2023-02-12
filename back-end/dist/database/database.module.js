@@ -22,7 +22,7 @@ DatabaseModule = __decorate([
                 host: 'localhost',
                 port: 5432,
                 username: 'postgres',
-                password: 'postgres',
+                password: '7878',
                 database: 'legendbookstore',
                 entities: [book_entity_1.Book, order_entity_1.Order, users_entity_1.Users],
                 synchronize: true,

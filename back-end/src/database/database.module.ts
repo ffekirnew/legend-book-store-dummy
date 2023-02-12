@@ -11,7 +11,7 @@ import { Order } from 'src/orders/entities/order.entity';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: 'postgres',
+      password: '7878',
       database: 'legendbookstore',
       entities: [Book, Order, Users],
       synchronize: true,

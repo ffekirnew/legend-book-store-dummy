@@ -20,8 +20,7 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    login(req, res) {
-        const dto = req.Body;
+    login(dto, res) {
         return this.authService.login(dto, res);
     }
     signup(dto) {
@@ -36,7 +35,7 @@ let AuthController = class AuthController {
 };
 __decorate([
     (0, common_1.Post)('login'),
-    __param(0, (0, common_1.Req)()),
+    __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),

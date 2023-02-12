@@ -26,6 +26,7 @@ let AuthService = class AuthService {
         this.jwt = jwt;
     }
     async login(dto, res) {
+        console.log('Im in');
         const { username, password } = dto;
         const theUser = await this.userrepo.findOne({ where: { username: (0, typeorm_2.Equal)(username) } });
         if (!theUser) {
