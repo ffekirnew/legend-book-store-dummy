@@ -18,10 +18,28 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const book_entity_1 = require("./book.entity");
 let BooksService = class BooksService {
-    constructor(booksRepository) {
-        this.booksRepository = booksRepository;
+    constructor(bookRepository) {
+        this.bookRepository = bookRepository;
     }
-    async addBook(createBookDto) {
+    async getAllBooks() {
+        const books = await this.bookRepository.find();
+        if (!books) {
+            throw new common_1.NotFoundException(`No books are found in the database.`);
+        }
+        return books;
+    }
+    async getBookByID(id) {
+        const found = await this.bookRepository.findOne({ where: { id } });
+        if (!found) {
+            throw new common_1.NotFoundException(`Book with ID ${id} not found.`);
+        }
+        return found;
+    }
+    async getBookCover(id) {
+        const book = await this.getBookByID(id);
+        return book.coverImage;
+    }
+    async createBook(createBookDto) {
         const book = new book_entity_1.Book();
         book.title = createBookDto.title;
         book.author = createBookDto.author;
@@ -31,10 +49,21 @@ let BooksService = class BooksService {
         book.synopsis = createBookDto.synopsis;
         book.price = createBookDto.price;
         book.coverImage = createBookDto.coverImage;
-        return this.booksRepository.save(book);
+        return this.bookRepository.save(book);
     }
-    async getAllBooks() {
-        return await this.booksRepository.find();
+    async updateBook(id, updateBookDto) {
+        const book = await this.getBookByID(id);
+        book.title = updateBookDto.title;
+        book.author = updateBookDto.author;
+        book.price = updateBookDto.price;
+        return await this.bookRepository.save(book);
+    }
+    async deleteBook(id) {
+        const found = await this.getBookByID(id);
+        if (!found) {
+            throw new common_1.NotFoundException(`Book with ID ${id} not found.`);
+        }
+        await this.bookRepository.delete(id);
     }
 };
 BooksService = __decorate([
