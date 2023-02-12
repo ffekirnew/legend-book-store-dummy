@@ -35,19 +35,21 @@ let BooksService = class BooksService {
         }
         return found;
     }
+    async getBookCover(id) {
+        const book = await this.getBookByID(id);
+        return book.coverImage;
+    }
     async createBook(createBookDto) {
         const book = new book_entity_1.Book();
         book.title = createBookDto.title;
         book.author = createBookDto.author;
+        book.category = createBookDto.category;
+        book.backgroundStory = createBookDto.backgroundStory;
+        book.exampleQuote = createBookDto.exampleQuote;
+        book.synopsis = createBookDto.synopsis;
         book.price = createBookDto.price;
-        try {
-            return await this.bookRepository.save(book);
-        }
-        catch (error) {
-            if (error.code == 23505) {
-                throw new common_1.ConflictException(`A book with the same title already exists in the database.`);
-            }
-        }
+        book.coverImage = createBookDto.coverImage;
+        return this.bookRepository.save(book);
     }
     async updateBook(id, updateBookDto) {
         const book = await this.getBookByID(id);

@@ -1,12 +1,17 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, ParseIntPipe, HttpCode } from '@nestjs/common';
-import { BooksService } from './books.service';
+import { Controller, Post, Body, UploadedFile, Req, UseInterceptors, Get, Put, Delete, Param, ParseIntPipe, Res, HttpCode } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { CreateBookDto } from './dto/create-book.dto';
+import { BooksService } from './books.service';
 import { Book } from './book.entity';
+import { UpdateBookDto } from './dto/update-book.dto';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
-  
+
   /**
    * Retrieves a book from the database by its ID.
    *
@@ -31,15 +36,47 @@ export class BooksController {
   }
 
   /**
+   * Returns the file name of the book's cover.
+   * 
+   * @param {number} id - the ID o fthe book whose cover is to be retrieved.
+   * @throws {NotFoundException} if the book with the said id doesn't exist in the database.
+   * @returns {Promise<string>} a string that contains the file name of the book.
+   */
+  @Get("/:id/cover")
+  async getImage(@Param("id") id: number, @Res() res: Response,) {
+    const imagePath = "./files/" + await this.booksService.getBookCover(id);
+
+    const image = fs.readFileSync(imagePath);
+    res.contentType('image/jpg');
+    res.send(image);
+  }
+
+  /**
    * Creates a new book in the database.
    * 
    * @param {CreateBookDto} createBookDto The data for the new book.
-   * @throws {ConflictException} if a book with the same title already exists in the database.
    * @returns {Promise<Book>} A promise that resolves to the newly created book.
    */
   @Post()
-  async createBook(@Body() createBookDto: CreateBookDto): Promise<Book> {
-    return await this.booksService.createBook(createBookDto);
+  @UseInterceptors(
+    FileInterceptor('coverImage', {
+      storage: diskStorage({
+        destination: './files',
+        filename: (req, file, cb) => {
+          const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+          cb(null, `${randomName}-${file.originalname}`);
+        },
+      }),
+    }),
+  )
+  async createBook(
+    @Body() createBookDto: CreateBookDto,
+    @UploadedFile() coverImage,
+    @Req() req,
+  ) {
+    createBookDto.coverImage = coverImage.filename;
+
+    return this.booksService.createBook(createBookDto);
   }
 
   /**
@@ -52,12 +89,8 @@ export class BooksController {
    */
   @Put(":id")
   @HttpCode(204)
-  async updateBook(@Param("id", ParseIntPipe) id: number, @Body() createBookDto: CreateBookDto): Promise<Book> {
-    try {
-      return await this.booksService.updateBook(id, createBookDto);
-    } catch (error) {
-      return await this.createBook(createBookDto);
-    }
+  async updateBook(@Param("id", ParseIntPipe) id: number, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
+    return await this.booksService.updateBook(id, updateBookDto);
   }
 
   /**

@@ -33,6 +33,7 @@ let AuthService = class AuthService {
             throw new common_1.BadRequestException("wrong credential");
         }
         const bufferedPass = Buffer.from(password);
+<<<<<<< HEAD
         const hashed = theUser.password.toString();
         const isSame = bcrypt.compare(bufferedPass, hashed);
         if (!isSame) {
@@ -45,6 +46,9 @@ let AuthService = class AuthService {
         res.cookie('middleware', token);
         res.send();
         return res.send("Login successful");
+=======
+        return "username or password is incorrect";
+>>>>>>> 8c3a22ebf95d4e1b0cacfa56421cca287dae2cd7
     }
     async signup(dto) {
         const { username, password } = dto;
