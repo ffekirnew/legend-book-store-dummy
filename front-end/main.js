@@ -20,7 +20,6 @@ form.addEventListener('submit', async (event) => {
   data.append('synopsis', synopsisInput.value);
   data.append('price', priceInput.value);
   data.append('coverImage', coverImageInput.files[0]);
-  data.append('audioDescription', audioDescriptionInput.files[0]);
 
   console.log(data);
   

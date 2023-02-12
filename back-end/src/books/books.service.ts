@@ -19,9 +19,14 @@ export class BooksService {
     book.category = createBookDto.category;
     book.backgroundStory = createBookDto.backgroundStory;
     book.exampleQuote = createBookDto.exampleQuote;
+    book.synopsis = createBookDto.synopsis;
     book.price = createBookDto.price;
     book.coverImage = createBookDto.coverImage;
 
     return this.booksRepository.save(book);
+  }
+
+  async getAllBooks(): Promise<Book[]> {
+    return await this.booksRepository.find();
   }
 }

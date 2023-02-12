@@ -28,9 +28,13 @@ let BooksService = class BooksService {
         book.category = createBookDto.category;
         book.backgroundStory = createBookDto.backgroundStory;
         book.exampleQuote = createBookDto.exampleQuote;
+        book.synopsis = createBookDto.synopsis;
         book.price = createBookDto.price;
         book.coverImage = createBookDto.coverImage;
         return this.booksRepository.save(book);
+    }
+    async getAllBooks() {
+        return await this.booksRepository.find();
     }
 };
 BooksService = __decorate([

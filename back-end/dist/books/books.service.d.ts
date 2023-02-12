@@ -5,4 +5,5 @@ export declare class BooksService {
     private readonly booksRepository;
     constructor(booksRepository: Repository<Book>);
     addBook(createBookDto: CreateBookDto): Promise<Book>;
+    getAllBooks(): Promise<Book[]>;
 }

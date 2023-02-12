@@ -26,6 +26,9 @@ let BooksController = class BooksController {
         createBookDto.coverImage = coverImage.filename;
         return this.booksService.addBook(createBookDto);
     }
+    async getAllBooks() {
+        return await this.booksService.getAllBooks();
+    }
 };
 __decorate([
     (0, common_1.Post)(),
@@ -45,6 +48,12 @@ __decorate([
     __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "addBook", null);
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BooksController.prototype, "getAllBooks", null);
 BooksController = __decorate([
     (0, common_1.Controller)('books'),
     __metadata("design:paramtypes", [books_service_1.BooksService])
