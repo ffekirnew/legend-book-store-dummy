@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 const books_service_1 = require("./books.service");
 const books_controller_1 = require("./books.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const book_entity_1 = require("./entities/book.entity");
+const book_entity_1 = require("./book.entity");
 let BooksModule = class BooksModule {
 };
 BooksModule = __decorate([

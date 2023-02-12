@@ -1,14 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Book } from './book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import { Book } from './entities/book.entity';
 
 @Injectable()
 export class BooksService {
-  // Initialize a new book repository that will connect with the database and perform
-  // type orm activities
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
@@ -48,20 +46,37 @@ export class BooksService {
   }
 
   /**
+   * Returns the file name of the book's cover.
+   * 
+   * @param {number} id - the ID o fthe book whose cover is to be retrieved.
+   * @throws {NotFoundException} if the book with the said id doesn't exist in the database.
+   * @returns {Promise<string>} a string that contains the file name of the book.
+   */
+  async getBookCover(id: number): Promise<string> {
+    const book = await this.getBookByID(id);
+
+    return book.coverImage;
+  }
+
+  /**
    * Adds a new book to the database.
    * 
    * @param createBookDto The book to be created
    * @returns A Promise that resolves to a Book entity that was just added to the database.
    */
   async createBook(createBookDto: CreateBookDto): Promise<Book> {
-    const book: Book = new Book();
-
+    const book = new Book();
+    
     book.title = createBookDto.title;
     book.author = createBookDto.author;
+    book.category = createBookDto.category;
+    book.backgroundStory = createBookDto.backgroundStory;
+    book.exampleQuote = createBookDto.exampleQuote;
+    book.synopsis = createBookDto.synopsis;
     book.price = createBookDto.price;
+    book.coverImage = createBookDto.coverImage;
 
-    // Add the book to the database
-    return await this.bookRepository.save(book);
+    return this.bookRepository.save(book);
   }
 
   /**

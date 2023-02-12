@@ -16,7 +16,7 @@ exports.BooksService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const book_entity_1 = require("./entities/book.entity");
+const book_entity_1 = require("./book.entity");
 let BooksService = class BooksService {
     constructor(bookRepository) {
         this.bookRepository = bookRepository;
@@ -35,12 +35,21 @@ let BooksService = class BooksService {
         }
         return found;
     }
+    async getBookCover(id) {
+        const book = await this.getBookByID(id);
+        return book.coverImage;
+    }
     async createBook(createBookDto) {
         const book = new book_entity_1.Book();
         book.title = createBookDto.title;
         book.author = createBookDto.author;
+        book.category = createBookDto.category;
+        book.backgroundStory = createBookDto.backgroundStory;
+        book.exampleQuote = createBookDto.exampleQuote;
+        book.synopsis = createBookDto.synopsis;
         book.price = createBookDto.price;
-        return await this.bookRepository.save(book);
+        book.coverImage = createBookDto.coverImage;
+        return this.bookRepository.save(book);
     }
     async updateBook(id, updateBookDto) {
         const book = await this.getBookByID(id);

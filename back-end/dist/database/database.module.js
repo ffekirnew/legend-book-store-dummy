@@ -9,7 +9,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const book_entity_1 = require("../books/entities/book.entity");
+const book_entity_1 = require("../books/book.entity");
+const users_entity_1 = require("../auth/users.entity");
 const order_entity_1 = require("../orders/entities/order.entity");
 let DatabaseModule = class DatabaseModule {
 };
@@ -23,7 +24,7 @@ DatabaseModule = __decorate([
                 username: 'postgres',
                 password: 'postgres',
                 database: 'legendbookstore',
-                entities: [book_entity_1.Book, order_entity_1.Order],
+                entities: [book_entity_1.Book, order_entity_1.Order, users_entity_1.Users],
                 synchronize: true,
             }),
             typeorm_1.TypeOrmModule.forFeature([book_entity_1.Book, order_entity_1.Order]),

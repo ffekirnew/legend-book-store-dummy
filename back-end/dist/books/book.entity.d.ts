@@ -1,4 +1,5 @@
-export declare class CreateBookDto {
+export declare class Book {
+    id: number;
     title: string;
     author: string;
     category: string;

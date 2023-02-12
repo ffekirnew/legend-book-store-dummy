@@ -1,4 +1,4 @@
-import { Book } from 'src/books/entities/book.entity';
+import { Book } from 'src/books/book.entity';
 export declare class Order {
     id: number;
     firstName: string;

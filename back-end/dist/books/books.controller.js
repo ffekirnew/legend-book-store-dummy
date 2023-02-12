@@ -14,9 +14,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BooksController = void 0;
 const common_1 = require("@nestjs/common");
-const books_service_1 = require("./books.service");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
 const create_book_dto_1 = require("./dto/create-book.dto");
+const books_service_1 = require("./books.service");
 const update_book_dto_1 = require("./dto/update-book.dto");
+const fs = require("fs");
 let BooksController = class BooksController {
     constructor(booksService) {
         this.booksService = booksService;
@@ -27,8 +30,21 @@ let BooksController = class BooksController {
     async getBookByID(id) {
         return this.booksService.getBookByID(id);
     }
-    async createBook(createBookDto) {
-        return await this.booksService.createBook(createBookDto);
+    async createBook(createBookDto, coverImage, req) {
+        createBookDto.coverImage = coverImage.filename;
+        return this.booksService.createBook(createBookDto);
+    }
+    async getImage(id, res) {
+        const imagePath = "./files/" + await this.booksService.getBookCover(id);
+        const image = fs.readFileSync(imagePath);
+        res.contentType('image/jpg');
+        res.send(image);
+    }
+    async updateBook(id, updateBookDto) {
+        return await this.booksService.updateBook(id, updateBookDto);
+    }
+    async deleteBook(id) {
+        return await this.booksService.deleteBook(id);
     }
     async updateBook(id, updateBookDto) {
         return await this.booksService.updateBook(id, updateBookDto);
@@ -52,11 +68,30 @@ __decorate([
 ], BooksController.prototype, "getBookByID", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('coverImage', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './files',
+            filename: (req, file, cb) => {
+                const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+                cb(null, `${randomName}-${file.originalname}`);
+            },
+        }),
+    })),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto]),
+    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], BooksController.prototype, "createBook", null);
+__decorate([
+    (0, common_1.Get)("/:id/cover"),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], BooksController.prototype, "getImage", null);
 __decorate([
     (0, common_1.Put)(":id"),
     __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
