@@ -46,6 +46,12 @@ let BooksController = class BooksController {
     async deleteBook(id) {
         return await this.booksService.deleteBook(id);
     }
+    async updateBook(id, updateBookDto) {
+        return await this.booksService.updateBook(id, updateBookDto);
+    }
+    async deleteBook(id) {
+        return await this.booksService.deleteBook(id);
+    }
 };
 __decorate([
     (0, common_1.Get)(),
